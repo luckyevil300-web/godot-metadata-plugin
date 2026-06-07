@@ -1,9 +1,10 @@
 plugins {
-    id 'com.android.library' version '8.2.2' apply true
+    id 'com.android.library'
 }
 
 android {
     namespace 'com.musicplayer.godot'
+
     compileSdk 34
 
     defaultConfig {
@@ -17,10 +18,13 @@ android {
     }
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 dependencies {
-    // Godot Android library — baixado pelo CI e colocado em libs/
     compileOnly fileTree(dir: 'libs', include: ['*.aar'])
 
-    // JAudioTagger: leitura de metadados ID3 / Vorbis
     implementation 'net.jthink:jaudiotagger:3.0.1'
 }
