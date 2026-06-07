@@ -19,21 +19,28 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
 
       - name: Baixar godot-lib AAR
         run: |
           mkdir -p libs
-          curl -L \
-            "https://github.com/godotengine/godot/releases/download/4.3-stable/godot-lib.4.3.stable.template_release.aar" \
-            -o libs/godot-lib.release.aar
+          # Tenta baixar o Godot 4.3 stable AAR
+          URL="https://github.com/godotengine/godot/releases/download/4.3-stable/godot-lib.4.3.stable.template_release.aar"
+          echo "Baixando: $URL"
+          curl -fL "$URL" -o libs/godot-lib.release.aar
+          echo "Tamanho: $(du -sh libs/godot-lib.release.aar)"
 
       - name: Gerar Gradle Wrapper
         run: gradle wrapper --gradle-version 8.5
 
       - name: Build AAR
-        run: ./gradlew assembleRelease --no-daemon
+        run: ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Upload plugin
         uses: actions/upload-artifact@v4
