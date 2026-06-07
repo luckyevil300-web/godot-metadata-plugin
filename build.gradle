@@ -1,6 +1,14 @@
-plugins {
-    id 'com.android.library' version '8.5.2'
+buildscript {
+    repositories {
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.5.2'
+    }
 }
+
+apply plugin: 'com.android.library'
 
 android {
     namespace 'com.musicplayer.godot'
@@ -25,6 +33,5 @@ repositories {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.aar'])
-
     implementation 'net.jthink:jaudiotagger:3.0.1'
 }
