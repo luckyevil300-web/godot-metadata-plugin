@@ -1,0 +1,57 @@
+plugins {
+    id 'com.android.library'
+}
+
+android {
+    namespace 'com.musicplayer.godot'
+    compileSdk 34
+
+    defaultConfig {
+        minSdk 21
+        targetSdk 34
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+
+    // Gera o .aar final com as dependências embutidas (fat AAR)
+    // O Godot 4 não resolve dependências transitivas automaticamente,
+    // por isso usamos a task de bundling abaixo.
+}
+
+configurations {
+    embed
+}
+
+dependencies {
+    // Godot Android library — coloque o godot-lib-*.aar em libs/
+    // Baixe em: https://github.com/godotengine/godot/releases
+    // Renomeie para godot-lib.release.aar e coloque em libs/
+    compileOnly fileTree(dir: 'libs', include: ['godot-lib.*.aar', 'godot-lib.aar'])
+
+    // JAudioTagger embutido no .aar final
+    embed('net.jthink:jaudiotagger:3.0.1') { transitive = true }
+    implementation configurations.embed
+}
+
+// Task: empacota as dependências embed dentro do .aar (fat AAR)
+task embedDependencies(type: Jar) {
+    dependsOn configurations.embed
+    from {
+        configurations.embed.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+    archiveBaseName.set('jaudiotagger-embedded')
+    destinationDirectory.set(file("$buildDir/intermediates/embed"))
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+}
+
+// Copia o .aar final para a pasta de saída do plugin
+task copyToOutput(type: Copy, dependsOn: 'assembleRelease') {
+    from "$buildDir/outputs/aar/godot-plugin-release.aar"
+    into "$rootDir/../output"
+    rename { "GodotMetadataPlugin.aar" }
+}

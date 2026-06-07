@@ -1,0 +1,9 @@
+[config]
+name="GodotMetadataPlugin"
+binary_type="local"
+binary="GodotMetadataPlugin.aar"
+
+[dependencies]
+local=[]
+remote=[]
+custom_maven_repos=[]
