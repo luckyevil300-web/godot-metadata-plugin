@@ -26,10 +26,7 @@ android {
     }
 }
 
-repositories {
-    google()
-    mavenCentral()
-}
+
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.aar'])
