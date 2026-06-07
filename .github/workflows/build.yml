@@ -1,0 +1,42 @@
+name: Build Godot Metadata Plugin
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Java 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      - name: Baixar godot-lib AAR
+        run: |
+          mkdir -p java-plugin/godot-plugin/libs
+          curl -L \
+            "https://github.com/godotengine/godot/releases/download/4.3-stable/godot-lib.4.3.stable.template_release.aar" \
+            -o java-plugin/godot-plugin/libs/godot-lib.release.aar
+
+      - name: Build AAR
+        working-directory: java-plugin/godot-plugin
+        run: ./gradlew assembleRelease --no-daemon
+
+      - name: Upload plugin
+        uses: actions/upload-artifact@v4
+        with:
+          name: GodotMetadataPlugin
+          path: |
+            java-plugin/godot-plugin/build/outputs/aar/godot-plugin-release.aar
+            java-plugin/godot-plugin/GodotMetadataPlugin.gdap
+            java-plugin/godot-plugin/MetadataPlugin.gd
+            java-plugin/godot-plugin/exemplo_player.gd
+          retention-days: 30
