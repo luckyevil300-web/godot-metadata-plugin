@@ -30,5 +30,9 @@ android {
 
 dependencies {
     compileOnly fileTree(dir: 'libs', include: ['*.aar'])
+
     implementation 'net.jthink:jaudiotagger:3.0.1'
+
+    implementation 'androidx.media3:media3-exoplayer:1.8.0'
+    implementation 'androidx.media3:media3-common:1.8.0'
 }
