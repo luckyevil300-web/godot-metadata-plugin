@@ -38,7 +38,11 @@ jobs:
 
       - name: Gerar Gradle Wrapper
         run: gradle wrapper --gradle-version 8.5
-
+      - name: Debug
+        run: |
+          pwd
+          ls -la
+          find . -name gradlew 
       - name: Build AAR
         run: ./gradlew assembleRelease --no-daemon --stacktrace
 
