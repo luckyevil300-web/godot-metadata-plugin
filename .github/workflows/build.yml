@@ -2,7 +2,9 @@ name: Build Godot Metadata Plugin
 
 on:
   push:
-    branches: [ main, master ]
+    branches:
+      - main
+      - master
   workflow_dispatch:
 
 jobs:
@@ -25,16 +27,14 @@ jobs:
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
         with:
-          gradle-version: '8.5'
+          gradle-version: 8.5
 
-      - name: Baixar godot-lib AAR
+      - name: Baixar Godot AAR
         run: |
           mkdir -p libs
-          # Tenta baixar o Godot 4.3 stable AAR
           URL="https://github.com/godotengine/godot/releases/download/4.3-stable/godot-lib.4.3.stable.template_release.aar"
-          echo "Baixando: $URL"
           curl -fL "$URL" -o libs/godot-lib.release.aar
-          echo "Tamanho: $(du -sh libs/godot-lib.release.aar)"
+          ls -lh libs
 
       - name: Gerar Gradle Wrapper
         run: gradle wrapper --gradle-version 8.5
@@ -47,7 +47,7 @@ jobs:
         with:
           name: GodotMetadataPlugin
           path: |
-            build/outputs/aar/godot-plugin-release.aar
+            build/outputs/aar/*.aar
             GodotMetadataPlugin.gdap
             MetadataPlugin.gd
             exemplo_player.gd
