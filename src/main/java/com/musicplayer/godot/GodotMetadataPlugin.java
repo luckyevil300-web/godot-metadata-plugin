@@ -1,6 +1,5 @@
 package com.musicplayer.godot;
-import androidx.media3.common.MediaItem;
-import androidx.media3.exoplayer.ExoPlayer;
+
 import android.content.ContentUris;
 import android.content.Context;
 import android.database.Cursor;
